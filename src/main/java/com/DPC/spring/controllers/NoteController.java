@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.DPC.spring.DTO.MatiereDTO;
 import com.DPC.spring.DTO.NoteDTO;
 import com.DPC.spring.entities.Trimestre;
-import com.DPC.spring.repositories.Eleverep;
 import com.DPC.spring.repositories.Matiererep;
 import com.DPC.spring.services.Inoteservice;
 
@@ -22,8 +21,6 @@ import com.DPC.spring.services.Inoteservice;
 public class NoteController {
     @Autowired
     private final Inoteservice inoteserviceimple;
-    @Autowired
-    private Eleverep eleverep;
     @Autowired
     private Matiererep matiererep;
 

@@ -9,29 +9,28 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.DPC.spring.entities.Matiere;
-import com.DPC.spring.repositories.MatiereRepository;
+import com.DPC.spring.entities.Classe;
+import com.DPC.spring.repositories.ClasseRepository;
 
 @RestController
-@RequestMapping("matiere")
-public class Matierecontroller {
+@RequestMapping("classe")
+public class ClasseController {
 @Autowired
-MatiereRepository matrepos ; 
-@PostMapping("ajout")
-public String ajout(@RequestBody Matiere m) {
-	Matiere matiere = this.matrepos.findByNom(m.getNom());
-	if(matiere==null) {
-		this.matrepos.save(m);
+ClasseRepository classerepos ; 
+
+@PostMapping("/ajouter")
+public String ajouter(@RequestBody Classe c) {
+	Classe cexiste = this.classerepos.findByNomclasse(c.getNomclasse());
+	if(cexiste==null) {
+		this.classerepos.save(c);
 		return "true";
 	}
 	else {
-		return "false" ; 
+		return "false";
 	}
 }
-
-@GetMapping("afficher")
-public List<Matiere> afficher(){
-	return this.matrepos.findAll() ;
+@GetMapping("/afficher")
+public List<Classe>afficher(){
+	return this.classerepos.findAll(); 
 }
 }
-

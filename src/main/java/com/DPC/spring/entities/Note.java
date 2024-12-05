@@ -37,11 +37,7 @@ public class Note {
     @ManyToOne
     @JoinColumn(name = "matiere_id", nullable = false)
     private Matiere mat;  // Matière associée à la note
+
     @ManyToOne
-    @JoinColumn(name = "eleve_id", nullable = false)
-    private Eleve el;
-
-
-    // Relation ManyToOne avec Eleve
-    // Élève associé à la note
+    Utilisateur user ;
 }

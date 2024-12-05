@@ -6,5 +6,7 @@ import com.DPC.spring.entities.Matiere;
 
 public interface MatiereRepository extends JpaRepository<Matiere, Long> {
 
+	Matiere findByNom(String nom);
+
 
 }

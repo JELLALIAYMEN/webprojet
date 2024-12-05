@@ -30,6 +30,7 @@ public class Utilisateur {
 	private String login ;
 	private String email ;
 	private String profil ;
+	private String libelle ;
 	private Boolean archiver ;
 	@JsonIgnore
 	@Temporal(TemporalType.DATE)

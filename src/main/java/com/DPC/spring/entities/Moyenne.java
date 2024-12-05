@@ -27,9 +27,8 @@ public class Moyenne {
 
     private Double moyennevalue;
     @ManyToOne
-    @JoinColumn(name = "eleve_id", nullable = false)
 
-    private Eleve el;
+    private Utilisateur user;
 
     @Enumerated(EnumType.STRING)
     private MoyenneType moyenneType;

@@ -23,5 +23,5 @@ public class Nondisponible {
 private Long id;
 private String nomjour ;
 @ManyToOne
-private Professeur prof ; 
+Utilisateur user ;
 }

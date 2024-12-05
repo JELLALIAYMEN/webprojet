@@ -33,14 +33,5 @@ public class Actualite {
     private Date date; // Date de l'actualité
 
     @ManyToOne
-    @JoinColumn(name = "eleve_id") // Spécifie la colonne de jointure pour l'élève
-    private Eleve el; // Association avec l'entité Eleve
-
-    @ManyToOne
-    @JoinColumn(name = "parent_id") // Spécifie la colonne de jointure pour le parent
-    private Parent Par; // Association avec l'entité Parent
-
-    @ManyToOne
-    @JoinColumn(name = "admin_id") // Spécifie la colonne de jointure pour l'admin
-    private Admin adm; // Association avec l'entité Admin
+    Utilisateur user ;
 }

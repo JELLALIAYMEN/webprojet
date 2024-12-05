@@ -46,7 +46,7 @@ public class SpringFoxConfig {
                 .license("Apache License Version 2.0")
                 .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0")
                 .termsOfServiceUrl("https://gitee.com/log4j/pig")
-                .contact(new Contact("marwen sghair","https://github.com/marwensghair95","marwen.sghaier@dipower.fr"))
+                .contact(new Contact("","",""))
                 .build();
     }
 

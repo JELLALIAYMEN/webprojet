@@ -84,17 +84,11 @@ UtilisateurRepository userrepos ;
 	PasswordResetToken tosave = new PasswordResetToken();
 	success.put("response", true);
 
-	mimeMessageHelper.setSubject("Réinitialiser votre mot de passe  ");
+	mimeMessageHelper.setSubject("test mail");
 	mimeMessageHelper.setFrom(email);
 	mimeMessageHelper.setTo(emailcrypter);
 	String content =" Bonjour Mr (Mme), <br>"
-			+ " <br><br>Bienvenue sur Union Sportive Tataouine.<br><br> \n"
 
-			+ "<p style=\"font-family:verdana;\">Pour changer votre mot de passe, veuillez cliquez sur le lien suivant :</p> "
-			+ "<a href=\"http://localhost:4200/#/nouveau-mp;id="+u.getId()  
-			+ "\">Cliquez-ici pour modifier votre mot de passe"
-			+"</a><br><br> <hp style=\\\"font-family:verdana;\\\">Ce lien  vous permez de changer votre mot de passe qu'une seule fois . </p>\r\n" + 
-			" <hp style=\\\\\\\"font-family:verdana;\\\\\\\">Identifiant :"+u.getEmail()+"</p> <br><br>"
 					+ "Cordialement ,<br><br>" ;
 	mimeMessageHelper.setText(content);
 	// Add a resource as an attachment
@@ -112,4 +106,42 @@ UtilisateurRepository userrepos ;
 	return success;
 
 	}
+
+
+
+	public Map<String, Boolean> testmail(String email,String objet,String description)throws NoSuchAlgorithmException, NoSuchPaddingException {
+	MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+	Map<String, Boolean> success = new TreeMap<String, Boolean>();
+	try {
+	MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+
+
+
+	Utilisateur u = this.userrepos.findByEmail(email);
+	
+
+	success.put("response", true);
+
+	mimeMessageHelper.setSubject(objet);
+	mimeMessageHelper.setFrom(email);
+	mimeMessageHelper.setTo(email);
+	String content =" Bonjour " + u.getNom()+ ", <br>"+ description + "Cordialement <br><br>" ;
+	mimeMessageHelper.setText(content);
+	mimeMessageHelper.setText("<html><body><p>" + content
+			+ "</p> </body></html>",
+			true);
+	// Add a resource as an attachment
+	javaMailSender.send(mimeMessageHelper.getMimeMessage());
+
+
+
+	success.put("response", false);
+	} catch (MessagingException x) {
+	x.printStackTrace();
+	}
+	return success;
+
+	}
+
+
 }

@@ -24,19 +24,11 @@ import lombok.NoArgsConstructor;
 @Table(name = "matiere")
 public class Matiere {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id; // Assurez-vous que c'est bien une clé primaire
 
     private String nom;
     private Double coefficient;
-
-    @ManyToOne
-    @JoinColumn(name = "eleve_id", nullable = true) // Permet NULL dans eleve_id
-    private Eleve eleve;
-
-
-    @OneToMany(mappedBy = "mat")
-    private List<Note> notes;
 
 
 }

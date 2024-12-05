@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 public interface UtilisateurRepository extends JpaRepository<Utilisateur,Long> {
   //  Utilisateur findById (long idUtilisateur) ;
 	Utilisateur findByEmail(String email);
-
+	Utilisateur findByLibelle(String libelle);
 	List<Utilisateur> findByArchiverIsFalse();
 	@Query(nativeQuery=true,value="select COUNT(*) FROM utilisateur where archiver=0")
 	Long countuser ();

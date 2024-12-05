@@ -16,13 +16,11 @@ import com.DPC.spring.DTO.PayementDTO;
 import com.DPC.spring.DTO.ReclamationDTO;
 import com.DPC.spring.entities.Actualite;
 import com.DPC.spring.entities.Discipline;
-import com.DPC.spring.entities.Eleve;
 import com.DPC.spring.entities.Matiere;
 import com.DPC.spring.entities.Moyenne;
 import com.DPC.spring.entities.Note;
 import com.DPC.spring.entities.Payement;
 import com.DPC.spring.entities.Reclamation;
-import com.DPC.spring.repositories.Eleverep;
 import com.DPC.spring.repositories.Matiererep;
 import com.DPC.spring.services.Inoteservice;
 
@@ -39,35 +37,6 @@ public class Mapperdto {
     Inoteservice InoteServiceimp;
 @Autowired
     Matiererep matiererep;
-@Autowired
-    Eleverep eleverep;
-    public EleveDTO fromEleve(Eleve eleve) {
-        if (eleve == null) {
-            return null;
-        }
-
-        EleveDTO eleveDTO = new EleveDTO();
-        BeanUtils.copyProperties(eleve, eleveDTO);
-
-        // Gestion des propriétés spéciales, par exemple les collections
-        // eleveDTO.setPayements(eleve.getPayements().stream().map(this::fromPayement).collect(Collectors.toList()));
-
-        return eleveDTO;
-    }
-
-    public Eleve fromEleveDTO(EleveDTO eleveDTO) {
-        if (eleveDTO == null) {
-            return null;
-        }
-
-        Eleve eleve = new Eleve();
-        BeanUtils.copyProperties(eleveDTO, eleve);
-
-        // Gestion des propriétés spéciales, par exemple les collections
-        // eleve.setPayements(eleveDTO.getPayements().stream().map(this::fromPayementDTO).collect(Collectors.toList()));
-
-        return eleve;
-    }
 
     public DisciplineDTO fromDiscipline(Discipline discipline) {
         if (discipline == null) {
@@ -148,7 +117,6 @@ public class Mapperdto {
         }
         MoyenneDTO moyenneDTO = new MoyenneDTO();
         BeanUtils.copyProperties(moyenne, moyenneDTO);
-        moyenneDTO.setIdel(moyenne.getEl().getId()); // Associe l'id de l'élève
         return moyenneDTO;
     }
 
@@ -168,7 +136,6 @@ public class Mapperdto {
 
         // Assurez-vous que ces champs sont bien mappés
         note.setMat(matiererep.findById(noteDTO.getIdmatiere()).orElse(null));
-        note.setEl(eleverep.findById(noteDTO.getIdel()).orElse(null));
 
         return note;
     }
@@ -185,10 +152,7 @@ public class Mapperdto {
             noteDTO.setIdmatiere(note.getMat().getId()); // Assuming getId() returns Matiere ID
         }
 
-        if (note.getEl() != null) {
-            noteDTO.setIdel(note.getEl().getId()); // Assuming getId() returns Eleve ID
-        }
-
+    
         return noteDTO;
     }
 

@@ -6,18 +6,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.DPC.spring.entities.Classe;
 import com.DPC.spring.entities.Emploidetemps;
-import com.DPC.spring.entities.Professeur;
 import com.DPC.spring.entities.Salle;
+import com.DPC.spring.entities.Utilisateur;
 
 public interface EmploiRepository extends JpaRepository<Emploidetemps, Long> {
 
-	Emploidetemps findByProfAndClasseAndDate(Professeur p, Classe c, Date date);
+	Emploidetemps findByUserAndClasseAndDate(Utilisateur p, Classe c, Date date);
 
 	Emploidetemps findByClasseAndDateAndHeure(Classe c, Date date, String heure);
 
-	Emploidetemps findByProfAndClasseAndHeureAndNomjour(Professeur p, Classe c, String heure, String nomjour);
+	Emploidetemps findByUserAndClasseAndHeureAndNomjour(Utilisateur p, Classe c, String heure, String nomjour);
 
-	Emploidetemps findByProfAndClasseAndNomjour(Professeur p, Classe c, String nomjour);
+	Emploidetemps findByUserAndClasseAndNomjour(Utilisateur p, Classe c, String nomjour);
 
 	Emploidetemps findByClasseAndNomjourAndHeure(Classe c, String nomjour, String heure);
 

@@ -12,37 +12,34 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.DPC.spring.entities.Salle;
 import com.DPC.spring.repositories.SalleRepository;
+import com.DPC.spring.services.ISalleService;
 
 @RestController
 @RequestMapping("salle")
 public class SalleController {
 
 @Autowired
-SalleRepository sallerepos ; 
-
+ISalleService salleserviice ;
+@Autowired
+SalleRepository sallerepos; 
 @PostMapping("/ajout")
-public String Ajout(@RequestBody Salle s) {
-	
-	Salle sexiste = this.sallerepos.findByNomdesalle(s.getNomdesalle());
-	if(sexiste==null) {
-		this.sallerepos.save(s);
-		return "true";
-	}
-	else {
-		return "false";
-	}
+public String Ajout(@RequestBody Salle s , String nomdep) {
+	return this.salleserviice.Ajout(s, nomdep);
 } 
 @GetMapping("/affichage")
 public List<Salle> affich(){
-	return this.sallerepos.findAll();
+	return this.salleserviice.afficher();
+}
+@GetMapping("/affichagebyid")
+public Salle affich(Long id){
+	return this.salleserviice.afficherbyid(id);
 }
 
 @PutMapping("/modif")
 public String modif(Long id , String nom) {
-	Salle s = this.sallerepos.findById(id).get();
-	s.setNomdesalle(nom);
-	this.sallerepos.saveAndFlush(s);
-	return "true";
+	
+	return 	this.salleserviice.modif(id, nom);
+	
 	
 }
 

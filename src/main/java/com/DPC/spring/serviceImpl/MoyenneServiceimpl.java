@@ -10,17 +10,17 @@ import org.springframework.stereotype.Service;
 import com.DPC.spring.DTO.MoyenneDTO;
 import com.DPC.spring.DTO.NoteDTO;
 import com.DPC.spring.Mapper.Mapperdto;
-import com.DPC.spring.entities.Eleve;
 import com.DPC.spring.entities.Matiere;
 import com.DPC.spring.entities.Moyenne;
 import com.DPC.spring.entities.MoyenneType;
 import com.DPC.spring.entities.Note;
 import com.DPC.spring.entities.Trimestre;
 import com.DPC.spring.entities.TypeNote;
-import com.DPC.spring.repositories.Eleverep;
+import com.DPC.spring.entities.Utilisateur;
 import com.DPC.spring.repositories.Matiererep;
 import com.DPC.spring.repositories.MoyenneRep;
 import com.DPC.spring.repositories.Noterep;
+import com.DPC.spring.repositories.UtilisateurRepository;
 import com.DPC.spring.services.Inoteservice;
 import com.DPC.spring.services.Moyenneservice;
 
@@ -31,14 +31,15 @@ public class MoyenneServiceimpl  implements Moyenneservice {
     @Autowired
     private MoyenneRep moyenneRep;
 
-
+    @Autowired
+    UtilisateurRepository userrespo ; 
     @Autowired
     private Mapperdto dto;
     @Autowired
     Noterep noterep;
 
     @Autowired
-    private Eleverep eleverep;
+    private UtilisateurRepository userrep;
     @Autowired
     private Matiererep matiererep;
 
@@ -55,12 +56,12 @@ public class MoyenneServiceimpl  implements Moyenneservice {
             throw new IllegalArgumentException("moyenneDTO cannot be null");
         }
 
-        Eleve el = eleverep.findById(moyenneDTO.getIdel())
+        Utilisateur el = userrep.findById(moyenneDTO.getIdel())
                 .orElseThrow(() -> new IllegalArgumentException("Eleve with id " + moyenneDTO.getIdel() + " not found"));
 
         // Convertir MoyenneDTO en entité Moyenne
         Moyenne moyenne = mapperdto.fromMoyenDTO(moyenneDTO);
-        moyenne.setEl(el); // Associe l'élève récupéré à l'entité Moyenne
+        moyenne.setUser(el); // Associe l'élève récupéré à l'entité Moyenne
 
         // Sauvegarde de la moyenne dans la base de données
         Moyenne savedMoyenne = moyenneRep.save(moyenne);
@@ -106,7 +107,7 @@ public class MoyenneServiceimpl  implements Moyenneservice {
 
         // Enregistrer la moyenne annuelle dans la base de données
         Moyenne moyenne = new Moyenne();
-        moyenne.setEl(eleverep.findById(elId).orElseThrow(() -> new IllegalArgumentException("Élève introuvable.")));
+        moyenne.setUser(userrep.findById(elId).orElseThrow(() -> new IllegalArgumentException("Élève introuvable.")));
         moyenne.setMoyenneType(MoyenneType.moyenneAnnuelle);
         moyenne.setMoyennevalue(moyenneAnnuelle);
 
@@ -144,7 +145,7 @@ public class MoyenneServiceimpl  implements Moyenneservice {
 
         // Enregistrer la moyenne dans la base de données
         Moyenne moyenne = new Moyenne();
-        moyenne.setEl(eleverep.findById(elId).orElseThrow(() -> new IllegalArgumentException("Élève introuvable.")));
+        moyenne.setUser(userrep.findById(elId).orElseThrow(() -> new IllegalArgumentException("Élève introuvable.")));
         moyenne.setTrimestre(trimestre);
         moyenne.setMoyenneType(MoyenneType.valueOf("moyenneTrimestrielle" + (trimestre.ordinal() + 1)));
 
@@ -183,7 +184,7 @@ public class MoyenneServiceimpl  implements Moyenneservice {
         MoyenneDTO moyenneDTO = new MoyenneDTO();
         moyenneDTO.setIdmoy(updatedMoyenne.getId().toString()); // Utiliser l'ID sous forme de chaîne de caractères
         moyenneDTO.setMoyennevalue(updatedMoyenne.getMoyennevalue());
-        moyenneDTO.setIdel(updatedMoyenne.getEl().getId());
+        moyenneDTO.setIdel(updatedMoyenne.getUser().getId());
         moyenneDTO.setTrimestre(updatedMoyenne.getTrimestre());
         moyenneDTO.setMoyenneType(updatedMoyenne.getMoyenneType());
 
@@ -196,7 +197,8 @@ public class MoyenneServiceimpl  implements Moyenneservice {
     @Override
     public Double calculerMoyenneParMatiéreAndEleve(Long elId, Trimestre trimestre, Long idMatiere) {
         // Récupérer les notes de l'élève pour la matière donnée et le trimestre
-        List<Note> notes = noterep.findByEl_IdAndTrimestreAndMat_Id(elId, trimestre, idMatiere);
+    	Utilisateur u = this.userrespo.findById(elId).get();
+        List<Note> notes = noterep.findByUserAndTrimestreAndMat_Id(u, trimestre, idMatiere);
 
         // Vérifier si des notes existent pour éviter une division par zéro
         if (notes.isEmpty()) {

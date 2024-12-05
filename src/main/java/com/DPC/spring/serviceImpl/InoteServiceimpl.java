@@ -9,23 +9,23 @@ import org.springframework.stereotype.Service;
 import com.DPC.spring.DTO.MatiereDTO;
 import com.DPC.spring.DTO.NoteDTO;
 import com.DPC.spring.Mapper.Mapperdto;
-import com.DPC.spring.entities.Eleve;
 import com.DPC.spring.entities.Matiere;
 import com.DPC.spring.entities.Note;
 import com.DPC.spring.entities.Trimestre;
 import com.DPC.spring.entities.TypeNote;
-import com.DPC.spring.repositories.Eleverep;
+import com.DPC.spring.entities.Utilisateur;
 import com.DPC.spring.repositories.Matiererep;
 import com.DPC.spring.repositories.Noterep;
+import com.DPC.spring.repositories.UtilisateurRepository;
 import com.DPC.spring.services.Inoteservice;
 
 @Service
 public class InoteServiceimpl implements  Inoteservice {
     @Autowired
     Noterep noterep;
-
     @Autowired
-    Eleverep eleverep;
+    UtilisateurRepository userrespo ; 
+   
     @Autowired
     Matiererep matiererep;
     @Autowired
@@ -43,13 +43,12 @@ public class InoteServiceimpl implements  Inoteservice {
 
 
         // Recherchez l'Eleve dans la base de données
-        Eleve eleve = eleverep.findById(matiereDTO.getEleveId()).get();
+        Utilisateur eleve = userrespo.findById(matiereDTO.getEleveId()).get();
                 
         // Créer et enregistrer la Matiere
         Matiere matiere = new Matiere();
         matiere.setNom(matiereDTO.getNom());
         matiere.setCoefficient(matiereDTO.getCoefficient());
-        matiere.setEleve(eleve);
          // Associez le niveau enum
 
         matiere = matiererep.save(matiere);
@@ -63,7 +62,8 @@ public class InoteServiceimpl implements  Inoteservice {
     @Override
     public List<NoteDTO> findByEl_IdAndTrimestreAndMat_Id(Long elId, Trimestre trimestre, Long idMatiere) {
         // Récupérer les notes à partir du repository
-        List<Note> notes = noterep.findByEl_IdAndTrimestreAndMat_Id(elId, trimestre, idMatiere);
+    	Utilisateur u = this.userrespo.findById(elId).get();
+        List<Note> notes = noterep.findByUserAndTrimestreAndMat_Id(u, trimestre, idMatiere);
 
         // Convertir la liste des notes en liste de NoteDTO
         return notes.stream()
@@ -93,9 +93,9 @@ public class InoteServiceimpl implements  Inoteservice {
         }
 
         // Récupérer l'entité Eleve associée à partir de l'ID fourni dans le DTO
-        Eleve el = eleverep.findById(noteDTO.getIdel())
+        Utilisateur el = userrespo.findById(noteDTO.getIdel())
                 .orElseThrow(() -> new IllegalArgumentException("Eleve with id " + noteDTO.getIdel() + " not found"));
-        note.setEl(el); // Associer Eleve à Note
+        note.setUser(el); // Associer Eleve à Note
 
         System.out.println(note.getNoteValue()+"////");
         

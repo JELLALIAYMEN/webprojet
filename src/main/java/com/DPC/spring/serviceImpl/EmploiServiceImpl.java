@@ -9,24 +9,24 @@ import com.DPC.spring.entities.Departement;
 import com.DPC.spring.entities.Emploidetemps;
 import com.DPC.spring.entities.Matiere;
 import com.DPC.spring.entities.Nondisponible;
-import com.DPC.spring.entities.Professeur;
 import com.DPC.spring.entities.Salle;
+import com.DPC.spring.entities.Utilisateur;
 import com.DPC.spring.repositories.ClasseRepository;
 import com.DPC.spring.repositories.DepartementRepository;
 import com.DPC.spring.repositories.EmploiRepository;
 import com.DPC.spring.repositories.Matiererep;
 import com.DPC.spring.repositories.NomdispoRepository;
-import com.DPC.spring.repositories.ProfesseurRepository;
 import com.DPC.spring.repositories.SalleRepository;
+import com.DPC.spring.repositories.UtilisateurRepository;
 import com.DPC.spring.services.IEmploiService;
 
 @Service
 public class EmploiServiceImpl implements IEmploiService {
-
+@Autowired
+UtilisateurRepository userepos ;
 @Autowired
 EmploiRepository emploirepos ; 
-@Autowired
-ProfesseurRepository profrespo ; 
+
 @Autowired
 DepartementRepository deparrepos ; 
 @Autowired
@@ -39,20 +39,20 @@ NomdispoRepository nondispo ;
 SalleRepository sallerepos ; 
 
 public String Creeremploi(Emploidetemps e , String libelle , String salles , String matiere , String classe ) {
-	Professeur p = this.profrespo.findByLibelle(libelle);
+	Utilisateur p = this.userepos.findByLibelle(libelle);
 	Salle s = this.sallerepos.findByNomdesalle(salles);
 	System.out.println(salles);
 	Matiere m = this.matrepos.findByNom(matiere);
 	Classe c = this.classeRepos.findByNomclasse(classe);
 	
 	
-	Nondisponible existe = this.nondispo.findByNomjourAndProf(e.getNomjour(),p);
+	Nondisponible existe = this.nondispo.findByNomjourAndUser(e.getNomjour(),p);
 	if(existe!=null) {
 		return "prof n'est pas disponible";
 	}
 	else
 	{
-		Emploidetemps emploiprofclasse = this.emploirepos.findByProfAndClasseAndNomjour(p,c,e.getNomjour());	
+		Emploidetemps emploiprofclasse = this.emploirepos.findByUserAndClasseAndNomjour(p,c,e.getNomjour());	
 		if(emploiprofclasse!=null) {
 			return "prof a ensiegne pour cette classe aujourd'hui";
 		}
@@ -70,7 +70,7 @@ public String Creeremploi(Emploidetemps e , String libelle , String salles , Str
 					e.setClasse(c);
 					e.setMatiere(m);
 					e.setSalle(s);
-					e.setProf(p);
+					e.setUser(p);
 					this.emploirepos.save(e);
 					return  "true"; 
 				}

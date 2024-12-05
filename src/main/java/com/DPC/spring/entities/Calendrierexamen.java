@@ -1,32 +1,36 @@
 package com.DPC.spring.entities;
 
-import javax.persistence.Entity;
-
-import java.time.LocalDateTime;
 import java.util.Date;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Entity
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Emploidetemps {
-    @Id
+@Data
+@Entity
+
+public class Calendrierexamen {
+	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private Date date;
     private String nomjour ;
-    private String heure ; 
-    
+    private String periode ; 
+    private String typecalendrier ; 
     @ManyToOne
     @JoinColumn(name = "classe_id")
     private Classe classe;
-
+    
     @ManyToOne
     private Salle salle;
     @ManyToOne
@@ -34,7 +38,6 @@ public class Emploidetemps {
     @ManyToOne
     Utilisateur user ;
     
-
 
 
 }

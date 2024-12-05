@@ -28,11 +28,8 @@ import lombok.NoArgsConstructor;
 	
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	    private Long id; // Correct, this works with MongoDB for String IDs.
-	    @ManyToOne
-	    @JoinColumn(name = "eleve_id", nullable = false)
-
-	    private Eleve eleve;
-
+	@ManyToOne
+	Utilisateur user ;
 	    private LocalDate date;
 	    private String file;
 	    private Double amount;

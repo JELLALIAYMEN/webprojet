@@ -24,9 +24,6 @@ public class Discipline {
 
     @Enumerated(EnumType.STRING)
     private TypeDisc typeDisc;
-
     @ManyToOne
-    @JoinColumn(name = "eleve_id", nullable = false)
-
-    private Eleve el;  // Ensure Eleve is correctly annotated as an entity as well
+    Utilisateur user ;
 }

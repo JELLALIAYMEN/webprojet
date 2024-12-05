@@ -76,6 +76,12 @@ public class UtilisateurController {
 	public String Ajout(@RequestBody Utilisateur user) {
 		Utilisateur userexist = this.userrepos.findByEmail(user.getEmail());
 		if(userexist==null){
+		Utilisateur u =this.userrepos.findByLibelle(user.getLibelle());
+		if(u!=null) {
+			return "libelle extste";
+		}
+		else {
+			
 		Autority auth = this.authrepos.findByName(user.getProfil());
 		String pass = encoder.encode(user.getPassword());
 		user.setAuthorities(auth);
@@ -84,7 +90,7 @@ public class UtilisateurController {
 		user.setArchiver(false);
 	 this.userrepos.save(user);
 		return "true";
-
+		}
 		}
 		else{
 			return  "user exist";
