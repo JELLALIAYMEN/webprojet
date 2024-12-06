@@ -10,8 +10,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import com.DPC.spring.entities.Autority;
+import com.DPC.spring.entities.Classe;
 import com.DPC.spring.entities.Utilisateur;
 import com.DPC.spring.repositories.AuthorityRepository;
+import com.DPC.spring.repositories.ClasseRepository;
 import com.DPC.spring.repositories.UtilisateurRepository;
 
 import java.security.NoSuchAlgorithmException;
@@ -71,26 +73,22 @@ public class UtilisateurController {
 		return "true";
 	}
 	
-	
+	@Autowired
+	ClasseRepository classerepos ;
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public String Ajout(@RequestBody Utilisateur user) {
+	public String Ajout(@RequestBody Utilisateur user, String nomclasse) {
 		Utilisateur userexist = this.userrepos.findByEmail(user.getEmail());
 		if(userexist==null){
-		Utilisateur u =this.userrepos.findByLibelle(user.getLibelle());
-		if(u!=null) {
-			return "libelle extste";
-		}
-		else {
-			
+		Classe c = this.classerepos.findByNomclasse(nomclasse);
 		Autority auth = this.authrepos.findByName(user.getProfil());
 		String pass = encoder.encode(user.getPassword());
 		user.setAuthorities(auth);
 		user.setPassword(pass);
 		user.setDatecreation(new Date(System.currentTimeMillis()));	
 		user.setArchiver(false);
+		user.setClasse(c);
 	 this.userrepos.save(user);
 		return "true";
-		}
 		}
 		else{
 			return  "user exist";

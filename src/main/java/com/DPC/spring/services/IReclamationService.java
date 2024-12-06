@@ -10,4 +10,5 @@ public interface IReclamationService {
 	 Reclamation reclamatioyid(Long id);
 	 List<Reclamation> recbyemail(String email );
 	 String reponse(Long id, String reponse) ; 
+	 String supprimer(Long id);
 }

@@ -1,5 +1,9 @@
 package com.DPC.spring.controllers;
 
+import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.NoSuchPaddingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,8 +19,8 @@ public class CalendrierExamenConrtroller {
 @Autowired
 ICalendrierExamenService service ; 
 @PostMapping("/creer")
-public String Creercalendrier(@RequestBody Calendrierexamen calendrier , String libelle , String salles , String matiere , String classe, String typecalendrier ) {
-	return this.service.Creercalendrier(calendrier, libelle, salles, matiere, classe,typecalendrier);
+public String Creercalendrier(@RequestBody Calendrierexamen calendrier , String email , String salles , String matiere , String classe, String typecalendrier )throws NoSuchAlgorithmException, NoSuchPaddingException {
+	return this.service.Creercalendrier(calendrier, email, salles, matiere, classe,typecalendrier);
 }
 
 	

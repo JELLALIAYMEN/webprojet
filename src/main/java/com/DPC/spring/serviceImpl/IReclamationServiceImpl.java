@@ -20,6 +20,7 @@ UtilisateurRepository userrepos ;
 public String reclamer(Reclamation r ,String email) {
 	Utilisateur u = this.userrepos.findByEmail(email);
 	r.setUser(u);
+	r.setResultat("Non Traité");
 	this.reclamationrepos.save(r);
 	return "true" ; 
 }
@@ -44,4 +45,11 @@ public String reponse(Long id, String reponse) {
 	return "true" ;
 
 }
+
+public String supprimer(Long id) {
+	Reclamation r = this.reclamationrepos.findById(id).get();
+	this.reclamationrepos.delete(r);
+	return "true" ; 
+}
+
 } 

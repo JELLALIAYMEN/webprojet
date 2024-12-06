@@ -1,5 +1,9 @@
 package com.DPC.spring.controllers;
 
+import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.NoSuchPaddingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,9 +22,8 @@ public class EmploiController {
 	
 	
 	@PostMapping("/creeremploi")
-	public String Creeremploi(@RequestBody Emploidetemps e , String libelle , String salle , String matiere , String classe ) {
-		System.out.println(salle);
-		return this.emploiservice.Creeremploi(e, libelle, salle, matiere, classe); 
+	public String Creeremploi(@RequestBody Emploidetemps e , String email , String salle , String matiere , String classe )throws NoSuchAlgorithmException, NoSuchPaddingException {
+		return this.emploiservice.Creeremploi(e, email, salle, matiere, classe); 
 	}
 
 }

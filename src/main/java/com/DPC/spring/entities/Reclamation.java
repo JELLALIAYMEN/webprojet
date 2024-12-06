@@ -27,7 +27,6 @@ public class Reclamation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;  
-    private String code;
 
     @Temporal(TemporalType.DATE) 
     private Date date;

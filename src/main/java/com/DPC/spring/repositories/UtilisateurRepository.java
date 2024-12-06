@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.DPC.spring.entities.Classe;
 import com.DPC.spring.entities.Utilisateur;
 import org.springframework.stereotype.Repository;
 
@@ -24,5 +25,6 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur,Long> {
 	Long countjoueur ();
 	@Query(nativeQuery=true,value="select COUNT(*) FROM document")
 	Long countdocument ();
+	List<Utilisateur> findByClasse(Classe c);
 
 }

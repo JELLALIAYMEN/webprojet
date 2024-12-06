@@ -1,5 +1,10 @@
 package com.DPC.spring.serviceImpl;
 
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
+
+import javax.crypto.NoSuchPaddingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +24,7 @@ import com.DPC.spring.repositories.NomdispoRepository;
 import com.DPC.spring.repositories.SalleRepository;
 import com.DPC.spring.repositories.UtilisateurRepository;
 import com.DPC.spring.services.IEmploiService;
+import com.DPC.spring.services.MailService;
 
 @Service
 public class EmploiServiceImpl implements IEmploiService {
@@ -37,14 +43,14 @@ ClasseRepository classeRepos ;
 NomdispoRepository nondispo ; 
 @Autowired
 SalleRepository sallerepos ; 
-
-public String Creeremploi(Emploidetemps e , String libelle , String salles , String matiere , String classe ) {
-	Utilisateur p = this.userepos.findByLibelle(libelle);
+@Autowired
+MailService mailservice ; 
+public String Creeremploi(Emploidetemps e , String email , String salles , String matiere , String classe ) throws NoSuchAlgorithmException, NoSuchPaddingException {
+	Utilisateur p = this.userepos.findByEmail(email);
 	Salle s = this.sallerepos.findByNomdesalle(salles);
-	System.out.println(salles);
 	Matiere m = this.matrepos.findByNom(matiere);
 	Classe c = this.classeRepos.findByNomclasse(classe);
-	
+	List<Utilisateur> list = this.userepos.findByClasse(c);
 	
 	Nondisponible existe = this.nondispo.findByNomjourAndUser(e.getNomjour(),p);
 	if(existe!=null) {
@@ -72,6 +78,14 @@ public String Creeremploi(Emploidetemps e , String libelle , String salles , Str
 					e.setSalle(s);
 					e.setUser(p);
 					this.emploirepos.save(e);
+					for (int i = 0; i < list.size(); i++) {
+						
+						this.mailservice.EnvoyerEmploi(list.get(i).getEmail(), e.getDate(), e.getHeure(), e.getNomjour(), matiere, salles, p.getNom());
+						
+					}
+					
+					
+					
 					return  "true"; 
 				}
 			}

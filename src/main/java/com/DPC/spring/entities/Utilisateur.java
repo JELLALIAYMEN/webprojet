@@ -38,4 +38,6 @@ public class Utilisateur {
 	@JsonIgnore
 	@ManyToOne
     private Autority authorities;
+	@ManyToOne
+	Classe classe ; 
 }

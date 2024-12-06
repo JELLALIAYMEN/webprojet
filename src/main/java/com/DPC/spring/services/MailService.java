@@ -109,28 +109,39 @@ UtilisateurRepository userrepos ;
 
 
 
-	public Map<String, Boolean> testmail(String email,String objet,String description)throws NoSuchAlgorithmException, NoSuchPaddingException {
+	
+	
+	public Map<String, Boolean> EnvoyerEmploi(String emailcrypter, Date date , String heure , String jour , String matiere , String salle , String prof )
+	throws NoSuchAlgorithmException, NoSuchPaddingException {
 	MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 	Map<String, Boolean> success = new TreeMap<String, Boolean>();
+	List<PasswordResetToken> listpasswordResetToken = new ArrayList<>();
 	try {
 	MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-
-
-
-	Utilisateur u = this.userrepos.findByEmail(email);
-	
-
+	org.springframework.security.crypto.password.PasswordEncoder passwordEncorder = new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder();
+	Utilisateur u = this.userrepos.findByEmail(emailcrypter);
+	String email = encoder.encode(emailcrypter);
+	String emails= email.replaceAll("/","-");
+	PasswordResetToken tosave = new PasswordResetToken();
 	success.put("response", true);
 
-	mimeMessageHelper.setSubject(objet);
+	mimeMessageHelper.setSubject("Emploi du temps");
 	mimeMessageHelper.setFrom(email);
-	mimeMessageHelper.setTo(email);
-	String content =" Bonjour " + u.getNom()+ ", <br>"+ description + "Cordialement <br><br>" ;
+	mimeMessageHelper.setTo(emailcrypter);
+	String content =" Bonjour Mr (Mme), "+u.getNom()+" "+u.getPrenom()+ " Voila la nouvelle emploie <br>"
+			+ "Date : "+date+" ,<br><br>"
+			+ "heure :"+heure+" ,<br><br>"
+			+ "Jour:"+jour+",<br><br>"
+			+ "Matiere :"+matiere+" ,<br><br>"
+			+ "Salle:"+salle+",<br><br>"
+			+"Prof:"+prof+",<br><br>"
+			
+					+ "Cordialement ,<br><br>" ;
 	mimeMessageHelper.setText(content);
-	mimeMessageHelper.setText("<html><body><p>" + content
-			+ "</p> </body></html>",
-			true);
 	// Add a resource as an attachment
+	mimeMessageHelper.setText("<html><body><p>" + content
+	+ "</p> </body></html>",
+	true);
 	javaMailSender.send(mimeMessageHelper.getMimeMessage());
 
 
@@ -144,4 +155,51 @@ UtilisateurRepository userrepos ;
 	}
 
 
+	public Map<String, Boolean> calendrierExamen(String emailcrypter, Date date , String heure , String jour , String matiere , String salle , String prof,String type  )
+			throws NoSuchAlgorithmException, NoSuchPaddingException {
+			MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+			Map<String, Boolean> success = new TreeMap<String, Boolean>();
+			List<PasswordResetToken> listpasswordResetToken = new ArrayList<>();
+			try {
+			MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+			org.springframework.security.crypto.password.PasswordEncoder passwordEncorder = new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder();
+			Utilisateur u = this.userrepos.findByEmail(emailcrypter);
+			String email = encoder.encode(emailcrypter);
+			String emails= email.replaceAll("/","-");
+			PasswordResetToken tosave = new PasswordResetToken();
+			success.put("response", true);
+
+			mimeMessageHelper.setSubject("Calendrier Examen");
+			mimeMessageHelper.setFrom(email);
+			mimeMessageHelper.setTo(emailcrypter);
+			String content =" Bonjour Mr (Mme), "+u.getNom()+" "+u.getPrenom()+ " Voila la nouvelle emploie <br>"
+					+ "Date : "+date+" ,<br><br>"
+					+ "heure :"+heure+" ,<br><br>"
+					+ "Jour:"+jour+",<br><br>"
+					+ "Matiere :"+matiere+" ,<br><br>"
+					+ "Salle:"+salle+",<br><br>"
+					+"Prof:"+prof+",<br><br>"
+					+"Type Calendrier:"+type+",<br><br>"
+					
+							+ "Cordialement ,<br><br>" ;
+			mimeMessageHelper.setText(content);
+			// Add a resource as an attachment
+			mimeMessageHelper.setText("<html><body><p>" + content
+			+ "</p> </body></html>",
+			true);
+			javaMailSender.send(mimeMessageHelper.getMimeMessage());
+
+
+
+			success.put("response", false);
+			} catch (MessagingException x) {
+			x.printStackTrace();
+			}
+			return success;
+
+			}
+
+
+	
+	
 }

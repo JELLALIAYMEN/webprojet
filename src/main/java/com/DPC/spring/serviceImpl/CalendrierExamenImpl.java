@@ -1,5 +1,10 @@
 package com.DPC.spring.serviceImpl;
 
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
+
+import javax.crypto.NoSuchPaddingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +24,7 @@ import com.DPC.spring.repositories.NomdispoRepository;
 import com.DPC.spring.repositories.SalleRepository;
 import com.DPC.spring.repositories.UtilisateurRepository;
 import com.DPC.spring.services.ICalendrierExamenService;
+import com.DPC.spring.services.MailService;
 @Service
 public class CalendrierExamenImpl implements ICalendrierExamenService {
 	@Autowired
@@ -36,19 +42,21 @@ public class CalendrierExamenImpl implements ICalendrierExamenService {
 	NomdispoRepository nondispo ; 
 	@Autowired
 	SalleRepository sallerepos ; 
-
+	@Autowired
+	MailService mailservice ;
 	
 	
-	public String Creercalendrier(Calendrierexamen calendrier , String libelle , String salles , String matiere , String classe ,String typecalendrier ) {
-		Utilisateur p = this.userepos.findByLibelle(libelle);
+	public String Creercalendrier(Calendrierexamen calendrier , String email , String salles , String matiere , String classe ,String typecalendrier ) throws NoSuchAlgorithmException, NoSuchPaddingException {
+		Utilisateur p = this.userepos.findByEmail(email);
 		if(p.getAuthorities().getName().equals("Teacher")) {
 			
-		
+			
 		Salle s = this.sallerepos.findByNomdesalle(salles);
 
 		Matiere m = this.matrepos.findByNom(matiere);
 
 		Classe c = this.classeRepos.findByNomclasse(classe);
+		List<Utilisateur> list = this.userepos.findByClasse(c);
 		
 		
 		if(typecalendrier.equals("synthese")) {
@@ -74,6 +82,16 @@ public class CalendrierExamenImpl implements ICalendrierExamenService {
 						calendrier.setUser(p);
 						calendrier.setTypecalendrier("Synthése");
 						this.calendrierrepos.save(calendrier);
+						
+						for (int i = 0; i < list.size(); i++) {
+							
+							this.mailservice.calendrierExamen(list.get(i).getEmail(), calendrier.getDate(), calendrier.getPeriode(), calendrier.getNomjour(), matiere, salles, p.getNom(),typecalendrier);
+							
+						}
+						
+						
+						
+						
 						return  "true"; 
 					}
 				}
@@ -91,6 +109,11 @@ public class CalendrierExamenImpl implements ICalendrierExamenService {
 			calendrier.setUser(p);
 			calendrier.setTypecalendrier("Controle");
 			this.calendrierrepos.save(calendrier);
+			for (int i = 0; i < list.size(); i++) {
+				
+				this.mailservice.calendrierExamen(list.get(i).getEmail(), calendrier.getDate(), calendrier.getPeriode(), calendrier.getNomjour(), matiere, salles, p.getNom(),typecalendrier);
+				
+			}
 			return  "true"; 	
 		}
 		}
