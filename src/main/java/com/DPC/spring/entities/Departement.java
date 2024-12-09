@@ -24,7 +24,12 @@ public class Departement {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private  Long id;
     private  String  nom;
-   
+   @OneToMany(mappedBy= "departement")
+    private  List<Classe> Classes;
+   @OneToMany(mappedBy= "departement")
+    private  List<Utilisateur> utilisateurs;
+
+
 
 
 }

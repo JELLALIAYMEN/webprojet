@@ -49,6 +49,7 @@ public class InoteServiceimpl implements  Inoteservice {
         Matiere matiere = new Matiere();
         matiere.setNom(matiereDTO.getNom());
         matiere.setCoefficient(matiereDTO.getCoefficient());
+
          // Associez le niveau enum
 
         matiere = matiererep.save(matiere);

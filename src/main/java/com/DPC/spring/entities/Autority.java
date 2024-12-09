@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.stream.DoubleStream;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -19,5 +21,6 @@ public class Autority {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	Long id;
 	private String name;
+
 
 }

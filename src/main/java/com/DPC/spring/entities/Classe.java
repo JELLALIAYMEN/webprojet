@@ -29,5 +29,8 @@ public class Classe {
 
     private String nomclasse;
 
-
+    @OneToMany(mappedBy = "classe")
+    private List <Utilisateur> utilisateurs;
+    @ManyToOne
+    private Departement departement;
 }

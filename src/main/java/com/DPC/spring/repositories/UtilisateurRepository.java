@@ -27,4 +27,7 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur,Long> {
 	Long countdocument ();
 	List<Utilisateur> findByClasse(Classe c);
 
+
+
+	List<Utilisateur> findAllByProfil(String profil);
 }
